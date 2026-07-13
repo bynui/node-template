@@ -1,3 +1,3 @@
 export default {
-  CREDENTIAL_NOT_FOUND: "Kredensial tidak ditemukan",
+  YOUR_KEY: "Terjemahan anda dalam bahasa Indonesia",
 };
