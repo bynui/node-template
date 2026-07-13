@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
+    "outDir": "dist",
+    "paths": {
+      "@root/*": ["."],
+      "@controllers/*": ["controllers/*"],
+      "@routes/*": ["routes/*"],
+      "@models/*": ["models/*"],
+      "@configs/*": ["configs/*"],
+      "@helpers/*": ["helpers/*"],
+      "@languages/*": ["languages/*"],
+      "@interfaces/*": ["interfaces/*"],
+      "@middlewares/*": ["middlewares/*"],
+      "@cores/*": ["cores/*"],
+      "@statics/*": ["statics/*"]
+    },
+    "typeRoots": ["./interfaces", "./node_modules/@types", "./types"],
+    "module": "ESNext",
+    "target": "ESNext",
+    "types": ["node"],
+    "lib": ["esnext"],
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noUncheckedIndexedAccess": true,
+    "strict": true,
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true
+  },
+  "ts-node": {
+    "esm": true
+  }
+}
