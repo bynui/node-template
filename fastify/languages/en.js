@@ -1,3 +1,3 @@
 export default {
-  CREDENTIAL_NOT_FOUND: "Credential is not found",
+  YOUR_KEY: "Your translation in english",
 };
