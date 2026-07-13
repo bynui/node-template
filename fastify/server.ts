@@ -1,4 +1,3 @@
-import "module-alias/register";
 import * as dotenv from "dotenv";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
