@@ -10,7 +10,7 @@ class Example extends Controller {
 
   async getExampleById(req: FastifyRequest) {
     const result = await exampleModel.getExample([
-      (req.params as any).propertyid,
+      (req.params as any).id,
     ]);
     return this.response({ result });
   }
