@@ -4,7 +4,7 @@ import cors from "@fastify/cors";
 import cookie from "@fastify/cookie";
 import I18n from "@middlewares/I18n.js";
 import ErrorHandler from "@middlewares/ErrorHandler";
-import RouteIndex from "./routes/RouteIndex.js";
+import Route from "cores/Route";
 
 console.clear();
 
@@ -60,7 +60,7 @@ app.addHook("onSend", async (_req, reply, payload) => {
   return payload;
 });
 
-const routeIndex = new RouteIndex(app);
+const routeIndex = new Route(app);
 await routeIndex.initialize();
 
 app.setNotFoundHandler((_req, reply) => {

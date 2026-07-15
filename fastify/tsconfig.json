@@ -5,16 +5,16 @@
     "outDir": "dist",
     "paths": {
       "@root/*": ["."],
-      "@controllers/*": ["controllers/*"],
-      "@routes/*": ["routes/*"],
-      "@models/*": ["models/*"],
+      "@cores/*": ["cores/*"],
       "@configs/*": ["configs/*"],
-      "@helpers/*": ["helpers/*"],
       "@languages/*": ["languages/*"],
       "@interfaces/*": ["interfaces/*"],
       "@middlewares/*": ["middlewares/*"],
-      "@cores/*": ["cores/*"],
-      "@statics/*": ["statics/*"]
+      "@routes/*": ["src/routes/*"],
+      "@controllers/*": ["src/controllers/*"],
+      "@models/*": ["src/models/*"],
+      "@helpers/*": ["src/helpers/*"],
+      "@statics/*": ["src/statics/*"]
     },
     "typeRoots": ["./interfaces", "./node_modules/@types", "./types"],
     "module": "ESNext",

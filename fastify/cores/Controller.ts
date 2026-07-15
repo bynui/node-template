@@ -3,7 +3,7 @@ import I18n from "@middlewares/I18n.js";
 import type {
   PaginationResult,
   ResponseOptions,
-} from "@interfaces/ResponseType";
+} from "@interfaces/cores/Controller";
 import { SUPPORTED_LANGUAGES } from "@configs/language";
 import type { Language } from "@configs/language";
 
@@ -28,7 +28,7 @@ export default abstract class Controller {
             lang,
           )
             ? (lang as Language)
-            : ("id" as Language);
+            : ("en" as Language);
           return original.call(this, req, reply);
         };
       }
