@@ -4,12 +4,12 @@ import type { FastifyRequest } from "fastify";
 
 class Example extends Controller {
   async getAllExample() {
-    const result = await exampleModel.getAll();
+    const result = await exampleModel.getExample();
     return this.response({ result });
   }
 
   async getExampleById(req: FastifyRequest) {
-    const result = await exampleModel.getExample([
+    const result = await exampleModel.getExampleById([
       (req.params as any).id,
     ]);
     return this.response({ result });
