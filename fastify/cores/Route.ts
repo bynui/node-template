@@ -22,22 +22,22 @@ export default class Route {
   }
 
   async #loadRoutes(): Promise<void> {
-    const files = await readdir(this.routesPath);
+    const files = await this.#walkDir(this.routesPath);
 
-    for (const file of files) {
-      const { name: routeName, ext } = path.parse(file);
+    for (const filePath of files) {
+      const relativePath = path.relative(this.routesPath, filePath);
+      const { name: routeName, ext } = path.parse(relativePath);
 
       // Skip the index file, the current file, and non-script files
       if (
-        file === this.currentFile ||
+        path.basename(filePath) === this.currentFile ||
         routeName === "index" ||
         (ext !== ".ts" && ext !== ".js") ||
-        file.endsWith(".d.ts")
+        filePath.endsWith(".d.ts")
       ) {
         continue;
       }
 
-      const filePath = path.join(this.routesPath, file);
       const fileUrl = pathToFileURL(filePath).href;
 
       try {
@@ -49,12 +49,36 @@ export default class Route {
           continue;
         }
 
+        // Build prefix from relative path: e.g. "test/Example.ts" -> "/test/example"
+        const dir = path.dirname(relativePath);
+        const prefixDir =
+          dir === "." ? "" : `/${dir.replace(/\\/g, "/").toLowerCase()}`;
+        const prefix = `${prefixDir}/${routeName.toLowerCase()}`;
+
         await this.app.register(routePlugin, {
-          prefix: `/${routeName.toLowerCase()}`,
+          prefix,
         });
       } catch (err) {
-        console.error(`Error registering route ${file}:`, err);
+        console.error(`Error registering route ${filePath}:`, err);
       }
     }
+  }
+
+  async #walkDir(dir: string): Promise<string[]> {
+    const entries = await readdir(dir, { withFileTypes: true });
+    const files: string[] = [];
+
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+
+      if (entry.isDirectory()) {
+        const subFiles = await this.#walkDir(fullPath);
+        files.push(...subFiles);
+      } else if (entry.isFile()) {
+        files.push(fullPath);
+      }
+    }
+
+    return files;
   }
 }
