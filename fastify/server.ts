@@ -23,7 +23,7 @@ await app.register(cors, {
 
 await app.register(cookie);
 
-await app.register(I18n.plugin);
+I18n.plugin(app, {});
 
 app.addHook("onSend", async (_req, reply, payload) => {
   reply.header("Cache-Control", "no-cache");

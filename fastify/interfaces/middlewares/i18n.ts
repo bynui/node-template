@@ -1,3 +1,3 @@
-export interface I18nStore {
-  translations: Record<string, any>;
+export interface I18nTranslations {
+  [key: string]: any;
 }
