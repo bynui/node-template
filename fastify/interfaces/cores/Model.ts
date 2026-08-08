@@ -1,5 +1,5 @@
 export interface ModelType {
   sql: string;
-  parameters?: any[];
+  values?: unknown[];
   useTransaction?: boolean;
 }
