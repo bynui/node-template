@@ -18,7 +18,7 @@ export default abstract class Model {
 
   async execute<T = any>({
     sql,
-    parameters = [],
+    values = [],
     useTransaction = false,
   }: ModelType): Promise<T[]> {
     const client: PoolClient = await pool.connect();
@@ -29,7 +29,7 @@ export default abstract class Model {
       const preparedStatement: QueryConfig = {
         name: this.#generateStatementName(sql),
         text: sql,
-        values: parameters,
+        values,
       };
 
       const { rows } = await client.query(preparedStatement);

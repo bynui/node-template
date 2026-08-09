@@ -1,5 +1,6 @@
 import * as dotenv from "dotenv";
 import express, {
+  type Express,
   type Request,
   type Response,
   type NextFunction,
@@ -18,7 +19,7 @@ console.clear();
 
 dotenv.config({ path: `.env.${process.env.ENV || "development"}` });
 
-const app = express();
+const app: Express = express();
 
 // Security & parsing middleware
 app.use(helmet());
@@ -28,12 +29,10 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// I18n middleware
 app.use(I18n.middleware as RequestHandler);
 
-// Normalize error payloads
 const normalizeResponse: RequestHandler = (
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction,
 ) => {
