@@ -21,38 +21,7 @@ A **Node.js** boilerplate generator for building backend applications with **Typ
 node-template/
 ├── .gitignore
 ├── README.md
-├── express/                          # Express.js boilerplate
-│   ├── .env.development              # Development environment variables
-│   ├── .env.example                  # Environment variable example
-│   ├── .gitignore
-│   ├── package.json
-│   ├── server.ts                     # Application entry point
-│   ├── tsconfig.json
-│   ├── configs/
-│   │   ├── db.ts                     # Database configuration
-│   │   └── language.ts               # Language configuration
-│   ├── cores/
-│   │   ├── Controller.ts             # Base controller class
-│   │   ├── ErrorHandler.ts           # Global error handler
-│   │   ├── Model.ts                  # Base model class
-│   │   └── Route.ts                  # Auto route registration
-│   ├── interfaces/
-│   │   ├── cores/                    # Core interfaces
-│   │   └── middlewares/              # Middleware interfaces
-│   ├── languages/
-│   │   ├── en.js                     # English translations
-│   │   └── id.js                     # Indonesian translations
-│   ├── middlewares/
-│   │   ├── ErrorHandler.ts           # Error handling middleware
-│   │   └── I18n.ts                   # Internationalization middleware
-│   ├── src/
-│   │   ├── controllers/              # Route controllers
-│   │   ├── helpers/                  # Helper utilities
-│   │   ├── models/                   # Database models
-│   │   └── routes/                   # Route definitions (auto-loaded)
-│   └── types/                        # TypeScript type definitions
-│
-└── fastify/                          # Fastify boilerplate
+└── express/fastify                   # Express or Fastify project boilerplate
     ├── .env.development              # Development environment variables
     ├── .env.example                  # Environment variable example
     ├── .gitignore
@@ -82,6 +51,7 @@ node-template/
     │   ├── models/                   # Database models
     │   └── routes/                   # Route definitions (auto-loaded)
     └── types/                        # TypeScript type definitions
+
 ```
 
 ## Available Frameworks
