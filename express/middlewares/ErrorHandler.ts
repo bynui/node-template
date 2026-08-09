@@ -15,7 +15,7 @@ class ErrorHandler {
     reply: Response,
     _next: NextFunction,
   ): void {
-    const statusCode = (error as any).statusCode || 500;
+    const statusCode = error.statusCode || 500;
 
     const json: Record<string, any> = {
       response: statusCode,
@@ -26,8 +26,8 @@ class ErrorHandler {
       json.trace = error.stack.split("\n").map((item) => item.trim());
     }
 
-    if ((error as any).allowed) {
-      reply.setHeader("Allow", (error as any).allowed.join(", "));
+    if (error.allowed) {
+      reply.setHeader("Allow", error.allowed.join(", "));
     }
 
     reply.status(statusCode).json(json);
