@@ -16,23 +16,25 @@ export default abstract class Model {
     return name;
   }
 
-  async execute<T = any>({
-    sql,
-    values = [],
-    useTransaction = false,
-  }: ModelType): Promise<T[]> {
+  async execute<T = any>(spec: ModelType | ModelType[]): Promise<T[]> {
+    const models = Array.isArray(spec) ? spec : [spec];
+    const useTransaction = models.some((model) => model.useTransaction);
     const client: PoolClient = await pool.connect();
 
     try {
       if (useTransaction) await client.query("BEGIN");
 
-      const preparedStatement: QueryConfig = {
-        name: this.#generateStatementName(sql),
-        text: sql,
-        values,
-      };
+      let rows: T[] = [];
+      for (const { sql, values = [] } of models) {
+        const preparedStatement: QueryConfig = {
+          name: this.#generateStatementName(sql),
+          text: sql,
+          values,
+        };
+        const result = await client.query(preparedStatement);
+        rows = result.rows;
+      }
 
-      const { rows } = await client.query(preparedStatement);
       if (useTransaction) await client.query("COMMIT");
       return rows;
     } catch (error: any) {
