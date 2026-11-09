@@ -9,4 +9,5 @@ export interface ResponseOptions<T = any> {
   status?: number;
   message?: string;
   result?: T[];
+  pagination?: boolean;
 }

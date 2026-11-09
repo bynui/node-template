@@ -3,15 +3,32 @@ import type {
   PaginationResult,
   ResponseOptions,
 } from "@interfaces/cores/Controller";
-import { SUPPORTED_LANGUAGES } from "@configs/language";
-import type { Language } from "@configs/language";
+import { type Language, normalizeLanguage } from "@configs/language";
+import requestContext from "@helpers/RequestContext";
 
 export default abstract class Controller {
-  protected getLanguage(req: FastifyRequest): Language {
-    const lang = (req.headers["language"] as string) ?? "en";
-    return (SUPPORTED_LANGUAGES as readonly string[]).includes(lang)
-      ? (lang as Language)
-      : ("en" as Language);
+  private get request() {
+    const request = requestContext.getStore();
+    if (!request) {
+      throw new Error("Request context is not available");
+    }
+    return request;
+  }
+
+  protected get headers() {
+    return this.request.headers;
+  }
+
+  protected get language(): Language {
+    return normalizeLanguage(this.headers.language as string | undefined);
+  }
+
+  protected get params(): Record<string, string> {
+    return this.request.params as Record<string, string>;
+  }
+
+  protected get body(): Record<string, unknown> {
+    return this.request.body as Record<string, unknown>;
   }
 
   protected pagination(request: FastifyRequest) {
@@ -33,34 +50,38 @@ export default abstract class Controller {
   }
 
   protected response<T = any>(
-    { status = 200, message = "ok", result = [] }: ResponseOptions<T> = {},
+    {
+      status = 200,
+      message = "ok",
+      result = [],
+      pagination = false,
+    }: ResponseOptions<T> = {},
     request: FastifyRequest,
     reply: FastifyReply,
   ): FastifyReply {
-    const { pagination } = this.pagination(request);
+    // Only build the page block when the endpoint opts into pagination.
+    const page = pagination ? this.pagination(request).pagination : undefined;
 
     const json: any = {
       response: status,
       message: message ? request.t(message) : "",
-      ...(status === 200 && { page: { ...pagination } }),
+      ...(status === 200 && page && { page: { ...page } }),
       result,
     };
 
     if (Array.isArray(result) && result.length) {
       if ((result[0] as any).datacount) {
         const datacount = parseInt((result[0] as any).datacount);
-        if (json.page) {
-          json.page.rowsTotal = datacount;
-          json.page.totalPage = Math.ceil(
-            json.page.rowsTotal / json.page.display,
-          );
+        if (page) {
+          page.rowsTotal = datacount;
+          page.totalPage = Math.ceil(page.rowsTotal / page.display);
         }
         const sanitized = (result as (T & { datacount?: number })[]).map(
           ({ datacount, ...rest }) => rest,
         );
         json.result = sanitized;
-      } else {
-        if (json.page) json.page.rowsTotal = result.length;
+      } else if (page) {
+        page.rowsTotal = result.length;
         json.result = result;
       }
     }
