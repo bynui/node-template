@@ -3,15 +3,32 @@ import type {
   PaginationResult,
   ResponseOptions,
 } from "@interfaces/cores/Controller";
-import { SUPPORTED_LANGUAGES } from "@configs/language";
-import type { Language } from "@configs/language";
+import { type Language, normalizeLanguage } from "@configs/language";
+import requestContext from "@helpers/RequestContext";
 
 export default abstract class Controller {
-  protected getLanguage(req: Request): Language {
-    const lang = (req.headers["language"] as string) ?? "en";
-    return (SUPPORTED_LANGUAGES as readonly string[]).includes(lang)
-      ? (lang as Language)
-      : ("en" as Language);
+  private get request() {
+    const request = requestContext.getStore();
+    if (!request) {
+      throw new Error("Request context is not available");
+    }
+    return request;
+  }
+
+  protected get headers() {
+    return this.request.headers;
+  }
+
+  protected get language(): Language {
+    return normalizeLanguage(this.headers.language as string | undefined);
+  }
+
+  protected get params(): Record<string, string> {
+    return this.request.params as Record<string, string>;
+  }
+
+  protected get body(): Record<string, unknown> {
+    return this.request.body as Record<string, unknown>;
   }
 
   protected pagination(request: Request) {
